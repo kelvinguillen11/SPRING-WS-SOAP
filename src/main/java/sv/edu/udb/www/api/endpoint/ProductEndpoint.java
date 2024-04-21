@@ -5,8 +5,6 @@ import org.springframework.context.annotation.Bean;
 import sv.edu.udb.www.api.converter.ProductConverter;
 import sv.edu.udb.www.api.entity.Product;
 import sv.edu.udb.www.api.generated.*;
-import sv.edu.udb.www.api.model.ProductModel;
-import sv.edu.udb.www.api.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
@@ -79,24 +77,34 @@ public class ProductEndpoint {
         }
         return response;
     }
-
-
-    @PayloadRoot(namespace = NAMESPACE_URI, localPart = "postProductRequest")
+    @PayloadRoot(namespace = NAMESPACE_URI, localPart = "updateProductRequest")
     @ResponsePayload
-    public PostProductResponse postProducts(@RequestPayload PostProductRequest request) {
-        PostProductResponse response = new PostProductResponse();
-        ProductModel productModel = productConverter.convertProductToProductModel(request.getProduct());
-        Product product = productConverter.convertProductModelToProduct(productRepository.save(productModel));
-        response.setProduct(product);
+    public UpdateProductResponse updateProduct(@RequestPayload UpdateProductRequest request) {
+        Product product = new Product();
+        BeanUtils.copyProperties(request.getProduct(), product);
+        ProductServices.updateProduct(product);
+        ProcessStatus processStatus = new ProcessStatus();
+        processStatus.setStatusCode("EXITO");
+        processStatus.setMessage("Producto registrado correctamente");
+        UpdateProductResponse response = new UpdateProductResponse();
+        response.setProcessStatus(processStatus);
         return response;
     }
-    @PayloadRoot(namespace = NAMESPACE_URI, localPart = "getProductsRequest")
+    @PayloadRoot(namespace = NAMESPACE_URI, localPart = "deleteProductRequest")
     @ResponsePayload
-    public GetProductsResponse getProducts(@RequestPayload GetProductsRequest request) {
-        GetProductsResponse response = new GetProductsResponse();
-        List<ProductModel> productModels = productRepository.findAll();
-        List<Product> products = productConverter.convertProductModelsToProducts(productModels);
-        response.getProducts().addAll(products);
+    public DeleteProductResponse deleteProduct(@RequestPayload DeleteProductRequest request) {
+        Product product = ProductServices.getProductById(request.getId());
+        ProcessStatus processStatus = new ProcessStatus();
+        if (product == null ) {
+            processStatus.setStatusCode("ERROR");
+            processStatus.setMessage("CONTENIDO NO DISPONIBLE");
+        } else {
+            ProductServices.deleteProduct(product);
+            processStatus.setStatusCode("EXITO");
+            processStatus.setMessage("CONTENIDO ELIMINADO CORRECTAMENTE");
+        }
+        DeleteProductResponse response = new DeleteProductResponse();
+        response.setProcessStatus(processStatus);
         return response;
     }
 }
