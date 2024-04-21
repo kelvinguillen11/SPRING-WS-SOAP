@@ -2,57 +2,99 @@
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xmlns:tns="http://www.udb.edu.sv/api/generated" targetNamespace="http://www.udb.edu.sv/api/generated"
     elementFormDefault="qualified">
-    <xs:element name="getProductsRequest">
+
+    <!--busqueda por Id-->
+    <xs:element name="getProductByIdRequest">
         <xs:complexType>
             <xs:sequence>
+                <xs:element name="id" type="xs:int"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
-    <xs:element name="getProductsResponse">
+    <xs:element name="getProductByIdResponse">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="products" type="tns:product" maxOccurs="unbounded"/>
+                <xs:element name="Product" type="tns:productInfo"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
 
-
-    <xs:element name="getProductResponse">
+<!--Obteniendo todos los registros-->
+    <xs:element name="getAllProductsRequest">
+     <xs:complexType/>
+    </xs:element>
+    <xs:element name="getAllProductsResponse">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="product" type="tns:product"/>
+                <xs:element name="products" type="tns:productInfo" maxOccurs="unbounded"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
-    <xs:element name="getProductRequest">
+
+    <!-- Guardar producto-->
+    <xs:element name="addProductRequest">
         <xs:complexType>
             <xs:sequence>
                 <xs:element name="name" type="xs:string"/>
+                <xs:element name="price" type="xs:double"/>
+                <xs:element name="category" type="xs:string"/>
+                <xs:element name="description" type="xs:string"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
-    <!-- Save -->
-    <xs:element name="postProductRequest">
+    <xs:element name="addProductResponse">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="product" type="tns:product"/>
+                <xs:element name="processStatus" type="tns:processStatus"/>
+                <xs:element name="product" type="tns:productInfo"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
-    <xs:element name="postProductResponse">
+
+    <!--modificar producto-->
+    <xs:element name="updateProductRequest">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="product" type="tns:product"/>
+                <xs:element name="product" type="tns:productInfo"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
-<xs:complexType name="product">
-<xs:sequence>
+    <xs:element name="updateProductResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="processStatus" type="tns:processStatus"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <!-- Eliminar un producto-->
+    <xs:element name="deleteProductRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="id" type="xs:int"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="deleteProductResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="processStatus" type="tns:processStatus"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="processStatus">
+        <xs:sequence>
+            <xs:element name="StatusCode" type="xs:string"/>
+            <xs:element name="message"  type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="productInfo">
+    <xs:sequence>
     <xs:element name="id" type="xs:int"/>
     <xs:element name="name" type="xs:string"/>
     <xs:element name="price" type="xs:double"/>
     <xs:element name="category" type="xs:string"/>
     <xs:element name="description" type="xs:string"/>
-</xs:sequence>
+    </xs:sequence>
 </xs:complexType>
 </xs:schema>

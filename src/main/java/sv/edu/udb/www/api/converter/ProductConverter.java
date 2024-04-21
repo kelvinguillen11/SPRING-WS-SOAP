@@ -2,7 +2,7 @@ package sv.edu.udb.www.api.converter;
 
 import sv.edu.udb.www.api.model.ProductModel;
 
-import sv.edu.udb.www.api.generated.Product;
+import sv.edu.udb.www.api.generated.ProductInfo;
 import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +10,7 @@ import java.util.List;
 @Component
 public class ProductConverter {
 
-    public ProductModel convertProductToProductModel(Product product) {
+    public ProductModel convertProductToProductModel(ProductInfo product) {
         ProductModel productModel = new ProductModel();
         productModel.setId(product.getId());
         productModel.setName(product.getName());

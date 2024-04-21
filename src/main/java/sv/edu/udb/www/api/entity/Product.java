@@ -1,15 +1,13 @@
-package sv.edu.udb.www.api.model;
+package sv.edu.udb.www.api.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.io.Serializable;
-
 @Entity
 @Table(name = "producto")
 @Data
-public class ProductModel implements Serializable {
-  private static final long serialVersionUID = 1L;
+public class Product {
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
